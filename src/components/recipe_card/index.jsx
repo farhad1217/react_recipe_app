@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 
 export default function RecipeCard({ serchedData }) {
-  const [favourite, setFavourite] = useState({});
+  const [favourite, setFavourite] = useState(() => {
+    const saved = localStorage.getItem("favouriteItem");
+    return saved ? JSON.parse(saved) : {};
+  });
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -13,7 +16,7 @@ export default function RecipeCard({ serchedData }) {
           `https://dummyjson.com/recipes/search?q=${serchedData}`,
         );
         const data = await response.json();
-        setData(data.recipes);
+        setData(data?.recipes || []);
         setError(false);
       } catch {
         setError(true);
@@ -25,7 +28,11 @@ export default function RecipeCard({ serchedData }) {
   }, [serchedData]);
 
   function handleFavourite(id) {
-    setFavourite((prev) => ({ ...prev, [id]: !prev[id] }));
+    setFavourite((prev) => {
+      const updated = { ...prev, [id]: !prev[id] };
+      localStorage.setItem("favouriteItem", JSON.stringify(updated));
+      return updated;
+    });
   }
 
   return (
