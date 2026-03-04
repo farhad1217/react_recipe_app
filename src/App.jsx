@@ -1,9 +1,10 @@
-import RecipeCard from './components/recipe_card'
+import SearchRecipe from './components/search_recipe'
 
 function App() {
   return (
     <>
-      <RecipeCard serchedData={"mango"} />
+      <SearchRecipe />
+      
     </>
   )
 }

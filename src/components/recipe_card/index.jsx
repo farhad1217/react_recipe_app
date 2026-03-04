@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function RecipeCard({ serchedData }) {
+export default function RecipeCard({ serchedData, buttonClick, setButtonClick, appON }) {
   const [favourite, setFavourite] = useState(() => {
     const saved = localStorage.getItem("favouriteItem");
     return saved ? JSON.parse(saved) : {};
@@ -9,6 +9,7 @@ export default function RecipeCard({ serchedData }) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    if(!buttonClick) return
     async function fetchData() {
       try {
         setLoading(true);
@@ -22,10 +23,12 @@ export default function RecipeCard({ serchedData }) {
         setError(true);
       } finally {
         setLoading(false);
+        setButtonClick(false)
       }
     }
+    if(buttonClick)
     fetchData();
-  }, [serchedData]);
+  }, [serchedData, buttonClick, setButtonClick]);
 
   function handleFavourite(id) {
     setFavourite((prev) => {
@@ -58,14 +61,22 @@ export default function RecipeCard({ serchedData }) {
           >
             Loading Data Please Wait...
           </p>
-        ) : serchedData === "" ? (
+        ) : data.length === 0 && !appON? (
           <p
             className="text-xl mb-10 text-center"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
             Please Enter Something to make
           </p>
-        ) : (
+        ) : data.length === 0 || serchedData === "" && !appON?
+        <p
+            className="text-xl mb-10 text-center"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            Nothing found
+          </p>
+        :
+        (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {data.map((item) => (
               <div
