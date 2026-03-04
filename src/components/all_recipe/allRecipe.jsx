@@ -13,7 +13,7 @@ export default function AllRecipes() {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch("https://dummyjson.com/recipes");
+        const response = await fetch("https://dummyjson.com/recipes?limit=50");
         const data = await response.json();
         setData(data?.recipes || []);
         setError(false);
