@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function AllRecipes() {
   const [favourite, setFavourite] = useState(() => {
@@ -12,9 +13,7 @@ export default function AllRecipes() {
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch(
-          "https://dummyjson.com/recipes",
-        );
+        const response = await fetch("https://dummyjson.com/recipes");
         const data = await response.json();
         setData(data?.recipes || []);
         setError(false);
@@ -58,75 +57,77 @@ export default function AllRecipes() {
           >
             Loading Data Please Wait...
           </p>
-        ) :
-        (
+        ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {data.map((item) => (
-              <div
-                key={item.id}
-                className="group relative bg-white/70 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/40"
-              >
-                <button
-                  onClick={() => handleFavourite(item.id)}
-                  className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur flex items-center justify-center shadow-md hover:scale-110 transition"
-                >
-                  {favourite[item.id] ? "❤️" : "🤍"}
-                </button>
-                <div className="h-48 overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3
-                    className="text-xl font-semibold text-gray-800 mb-3 line-clamp-1"
-                    style={{ fontFamily: "Playfair Display, serif" }}
+              <Link key={item.id} to={"/recipe/" + item.id}>
+                <div className="group relative bg-white/70 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/40">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFavourite(item.id);
+                    }}
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur flex items-center justify-center shadow-md hover:scale-110 transition"
                   >
-                    {item.name}
-                  </h3>
-                  <div
-                    className="grid grid-cols-2 gap-y-2 text-sm text-gray-600"
-                    style={{ fontFamily: "Inter, sans-serif" }}
-                  >
-                    <p>
-                      <span className="font-medium">Prep:</span>{" "}
-                      {item.prepTimeMinutes}m
-                    </p>
-                    <p>
-                      <span className="font-medium">Cook:</span>{" "}
-                      {item.cookTimeMinutes}m
-                    </p>
-                    <p>
-                      <span className="font-medium">Calories:</span>{" "}
-                      {item.caloriesPerServing}
-                    </p>
-                    <p>
-                      <span className="font-medium">Servings:</span>{" "}
-                      {item.servings}
-                    </p>
-                    <p>
-                      <span className="font-medium">Cuisine:</span>{" "}
-                      {item.cuisine}
-                    </p>
-                    <p>
-                      <span className="font-medium">Level:</span>{" "}
-                      <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-xs font-semibold">
-                        {item.difficulty}
+                    {favourite[item.id] ? "❤️" : "🤍"}
+                  </button>
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <h3
+                      className="text-xl font-semibold text-gray-800 mb-3 line-clamp-1"
+                      style={{ fontFamily: "Playfair Display, serif" }}
+                    >
+                      {item.name}
+                    </h3>
+                    <div
+                      className="grid grid-cols-2 gap-y-2 text-sm text-gray-600"
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    >
+                      <p>
+                        <span className="font-medium">Prep:</span>{" "}
+                        {item.prepTimeMinutes}m
+                      </p>
+                      <p>
+                        <span className="font-medium">Cook:</span>{" "}
+                        {item.cookTimeMinutes}m
+                      </p>
+                      <p>
+                        <span className="font-medium">Calories:</span>{" "}
+                        {item.caloriesPerServing}
+                      </p>
+                      <p>
+                        <span className="font-medium">Servings:</span>{" "}
+                        {item.servings}
+                      </p>
+                      <p>
+                        <span className="font-medium">Cuisine:</span>{" "}
+                        {item.cuisine}
+                      </p>
+                      <p>
+                        <span className="font-medium">Level:</span>{" "}
+                        <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-xs font-semibold">
+                          {item.difficulty}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t">
+                      <span className="text-amber-500 font-semibold">
+                        ⭐ {item.rating}
                       </span>
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t">
-                    <span className="text-amber-500 font-semibold">
-                      ⭐ {item.rating}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {item.reviewCount} reviews
-                    </span>
+                      <span className="text-xs text-gray-500">
+                        {item.reviewCount} reviews
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

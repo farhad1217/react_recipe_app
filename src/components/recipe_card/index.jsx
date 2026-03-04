@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function RecipeCard({ serchedData, buttonClick, setButtonClick, appON }) {
   const [favourite, setFavourite] = useState(() => {
@@ -85,13 +86,17 @@ export default function RecipeCard({ serchedData, buttonClick, setButtonClick, a
         :
         (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {data.map((item) => (
+            {data.map((item) => (<Link key={item.id} to={"/recipe/" + item.id}>
               <div
-                key={item.id}
+                
                 className="group relative bg-white/70 backdrop-blur-lg rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/40"
               >
                 <button
-                  onClick={() => handleFavourite(item.id)}
+                  onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleFavourite(item.id);
+                    }}
                   className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur flex items-center justify-center shadow-md hover:scale-110 transition"
                 >
                   {favourite[item.id] ? "❤️" : "🤍"}
@@ -151,6 +156,7 @@ export default function RecipeCard({ serchedData, buttonClick, setButtonClick, a
                   </div>
                 </div>
               </div>
+              </Link>
             ))}
           </div>
         )}

@@ -3,6 +3,8 @@ import SearchRecipe from './components/search_recipe'
 import Navbar from './components/navbar/navbar'
 import Favourite from './components/favourite/favourite'
 import AllRecipes from './components/all_recipe/allRecipe'
+import RecipeDetails from './components/recipe_details/recipeDetails'
+import PageNotFound from './components/page_not_foud/404'
 
 function Layout(){
   return <div>
@@ -18,6 +20,8 @@ function App() {
         <Route index element={<SearchRecipe />}/>
         <Route path="favourite" element={<Favourite />}/>
         <Route path="all_recipes" element={<AllRecipes />}/>
+        <Route path="recipe/:id" element={<RecipeDetails />}/>
+        <Route path="*" element={<PageNotFound />}/>
       </Route>
     )
   )
