@@ -10,11 +10,18 @@ export default function RecipeCard({ serchedData, buttonClick, setButtonClick, a
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     if(!buttonClick) return
+    if (!serchedData?.trim()) {
+      setData([]);          
+      setError(false);
+      setLoading(false);
+      setButtonClick(false);
+      return;
+    }
     async function fetchData() {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://dummyjson.com/recipes/search?q=${serchedData}`,
+          `https://dummyjson.com/recipes/search?q=${encodeURIComponent(serchedData)}`,
         );
         const data = await response.json();
         setData(data?.recipes || []);
@@ -61,14 +68,14 @@ export default function RecipeCard({ serchedData, buttonClick, setButtonClick, a
           >
             Loading Data Please Wait...
           </p>
-        ) : data.length === 0 && !appON? (
+        ) : !appON? (
           <p
             className="text-xl mb-10 text-center"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
             Please Enter Something to make
           </p>
-        ) : data.length === 0 || serchedData === "" && !appON?
+        ) : data.length === 0?
         <p
             className="text-xl mb-10 text-center"
             style={{ fontFamily: "Playfair Display, serif" }}

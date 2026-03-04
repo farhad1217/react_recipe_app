@@ -21,7 +21,7 @@ export default function Search() {
         return;
       }
       const res = await fetch(
-        `https://dummyjson.com/recipes/search?q=${debouncedSearch}`,
+        `https://dummyjson.com/recipes/search?q=${encodeURIComponent(debouncedSearch)}`,
       );
       const dataa = await res.json();
       const onlyName = (dataa.recipes || []).map((item) => item.name);
